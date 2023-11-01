@@ -10,12 +10,12 @@ class Map:
     img: any
     arr: ndarray
 
-    def __init__(self, size: tuple = (5, 5), file_path=None):
+    def __init__(self, size: tuple = (5, 5), file_path=None, empty_sign: str = "."):
         if file_path:
             with open(file_path) as file:
                 arr = []
                 for line in file.readlines():
-                    row = [0 if char == "." else 1 for char in line.strip("\n")]
+                    row = [0 if char == empty_sign else 1 for char in line.strip("\n")]
                     arr.append(row)
             self.arr = np.asarray(arr)
         else:
@@ -68,6 +68,8 @@ class Map:
     def animate(self, frames: int = 10, interval: int = 30):
         """ Function which automatically calls step() then animates each step using matplotlib """
         fig, ax = plt.subplots()
+        ax.set_yticklabels([])
+        ax.set_xticklabels([])
         self.img = plt.imshow(self.arr)
         _ = matplotlib.animation.FuncAnimation(fig=fig, func=self._frame, frames=frames, interval=interval)
         plt.show()
@@ -79,5 +81,6 @@ class Map:
         self.img.set(data=self.arr)
 
 
-life = Map(file_path="sample_patterns/pulsar.txt")
-life.animate()
+if __name__ == '__main__':
+    life = Map(file_path="sample_patterns/pulsar.txt")
+    life.animate()
